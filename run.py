@@ -71,26 +71,6 @@ def validate_data(values):
 # Function that inserts data into our spreadsheet
 
 
-def update_sales_worksheet(data):
-    """
-    Update sales worksheet, add new row with the list data provided.
-    """
-    print("Updating sales worksheet...\n") # The \n adds a space between paragraphs
-    sales_worksheet = SHEET.worksheet("sales") # We are using the worksheet method to acces our "sales" worksheet in the spreadsheet
-    sales_worksheet.append_row(data) # The append_row method adds a new row to the end of our data in the worksheet selected
-    print("Sales worksheet updated successfully!\n")
-
-
-def update_surplus_worksheet(data):
-    """
-    Update surplus worksheet, add new row with the list data provided.
-    """
-    print("Updating surplus worksheet...\n")
-    surplus_worksheet = SHEET.worksheet("surplus")
-    surplus_worksheet.append_row(data)
-    print("Surplus worksheet updated successfully!\n")
-
-
 def update_worksheet(data, worksheet):
     """
     Receives a list of integers to be inserted into a worksheet
@@ -127,9 +107,26 @@ def calculate_surplus_data(sales_row):
     return surplus_data
 
 
+def gest_last_5_entries_sales():
+    """
+    Collects columns of data from sales worksheet, collecting the last
+    5 entries for each sandwich and returns the data as a list of lists.
+    """
+    sales = SHEET.worksheet("sales")
+    # column = sales.col_values(3) # We're using the col_values() method by gspread (Python API for Google Sheets)
+    # print(column)
+
+    columns = []
+    for ind in range(1, 7):
+        column = sales.col_values(ind)
+        columns.append(column[-5:]) # Collects the last 5 entries for each sandwich
+    
+    return columns
+
+
 def main():
     """
-    Run all program functions
+    Run all program functionsm
     """
     data = get_sales_data()
     sales_data = [int(num) for num in data]
@@ -139,7 +136,9 @@ def main():
 
 
 print("Welcome to Love Sandwiches Data Automation\n")
-main()
+# main() # Handy way to test an individual function - by commenting out the main() function for it not to run at the same time
+
+sales_columns = get_last_5_entries_sales()
 
 # stock - sales = surplus
 # These are methods from the gspread library
