@@ -1,5 +1,6 @@
 import gspread # Imports the entire gspread library so that we can access any function, class, or method within it
 from google.oauth2.service_account import Credentials # Imports the credentials class which is part of the service_account function from the google-auth library
+from pprint import pprint
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -78,6 +79,35 @@ def update_sales_worksheet(data):
     print("Sales worksheet updated successfully!\n")
 
 
-data = get_sales_data()
-sales_data = [int(num) for num in data]
-update_sales_worksheet(sales_data) # We need to call our function and pass it our sales_data list
+def calculate_surplus_data(sales_row):
+    """
+    Compare sales with stock and calculate the surplus for each item type.
+
+    The surplus is defined as the sales figure substracted from the stock: 
+    - Positive surplus indicates wate
+    - Negative surplus inficates extra made when stock was sold out
+    """
+    print("Calculating surplus data...\n")
+    stock = SHEET.worksheet("stock").get_all_values() # Method to fetch all of the cells from our stock worksheet
+    # pprint(stock) # We are using the pprint() method instead of the standard print() statement, so our data is easier to read when it's printed to the terminal
+    # To use pprint(), I need to install it to the top of the file too
+    # Results in the terminal: each nested list corresponds to a row in our stock worksheet
+    stock_row = stock[-1] # To access the last list in the stock data - simpliest way to do this is by using slice - slices the final item form the list
+    print(stock_row)
+
+
+def main():
+    """
+    Run all program functions
+    """
+    data = get_sales_data()
+    sales_data = [int(num) for num in data]
+    update_sales_worksheet(sales_data) # We need to call our function and pass it our sales_data list
+    calculate_surplus_data(sales_data)
+
+
+print("Welcome to Love Sandwiches Data Automation\n")
+main()
+
+# stock - sales = surplus
+# This are methods from the gspread library
