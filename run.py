@@ -93,7 +93,15 @@ def calculate_surplus_data(sales_row):
     # To use pprint(), I need to install it to the top of the file too
     # Results in the terminal: each nested list corresponds to a row in our stock worksheet
     stock_row = stock[-1] # To access the last list in the stock data - simpliest way to do this is by using slice - slices the final item form the list
-    print(stock_row)
+    # print(f"stock row: {stock_row}")
+    # print(f"sales row: {sales_row}")
+
+    surplus_data = []
+    for stock, sales in zip(stock_row, sales_row):
+        surplus = int(stock) - sales 
+        surplus_data.append(surplus)
+
+    return surplus_data
 
 
 def main():
@@ -103,7 +111,8 @@ def main():
     data = get_sales_data()
     sales_data = [int(num) for num in data]
     update_sales_worksheet(sales_data) # We need to call our function and pass it our sales_data list
-    calculate_surplus_data(sales_data)
+    new_surplus_data = calculate_surplus_data(sales_data)
+    print(new_surplus_data)
 
 
 print("Welcome to Love Sandwiches Data Automation\n")
